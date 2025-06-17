@@ -7,12 +7,9 @@ WHITE = 15
 BLACK = 0
 
 wbgt = 0
-condition = "a"
-rainPercent = "20%"
-lightningPercent = "20%"
-UVI = "4"
+uvi = 0
 
-# Takes lat and lon in string
+# Takes lat (str) and lon (str) to download WBGT data from NOAA
 # Returns date (str), time (str) and wbgt forecast (int).
 #
 def getWbgt(lat, lon):
@@ -38,7 +35,7 @@ def getWbgt(lat, lon):
         
     return (date, time, int(wbgt))
 
-# Takes WBGT (int) and its corresponding alert condition
+# Takes WBGT (int) and its corresponding alert condition (str)
 #
 def wbgtCondition(wbgt):
     if wbgt <= 76:
@@ -53,8 +50,13 @@ def wbgtCondition(wbgt):
         condition = "Extreme"
     return condition
 
+# Takes lat (str), lon (str) and API key (str) to download
+#   precip (chance of rain, %), lightning forecast and UV Index. 
+# Returns precip (str; e.g. "10"), lightning (str: "Y" or "N") and UVI (float).
+#
 def getOwmData(lat, lon, apiKey):
-    weatherData = openweather.getLatLonWeather(lat, lon, apiKey, exclude="minutely,daily,alerts")
+    weatherData = openweather.getLatLonWeather(lat, lon, apiKey,
+                                               exclude="minutely,daily,alerts")
     # Chance of rain (%)
     precip = openweather.getProbPrecipNextHr(weatherData)
     precip = int(precip*100)
@@ -67,7 +69,7 @@ def getOwmData(lat, lon, apiKey):
     # UVI
     uvi = openweather.getCurrentUvi(weatherData)
     uvi = round(uvi, 1)
-    return (str(precip), lightning, str(uvi))    
+    return (str(precip), lightning, uvi)    
 
 def displayEnvInfo(display, lat, lon, apiKey, useWifi=True):
     if useWifi:
@@ -79,35 +81,42 @@ def displayEnvInfo(display, lat, lon, apiKey, useWifi=True):
         except RuntimeError:
             date = "00-00"
             time = "00:00"
-            wbgt = "0"
+            wbgt = 0
             
         try:
             precip, lightning, uvi = getOwmData(lat, lon, apiKey)
         except RuntimeError:
             precip = "--"
             lightning = "--"
-            uvi = "--"
+            uvi = -1
 
         with open("envcond.txt", "w") as f:
-            f.write(date + "\n" + time + "\n" + str(wbgt) + "\n" +\
-                    precip + "\n" + lightning + "\n" + uvi)
+            lines = date      + "\n" +\
+                    time      + "\n" +\
+                    str(wbgt) + "\n" +\
+                    precip    + "\n" +\
+                    lightning + "\n" +\
+                    str(uvi)
+            f.write(lines)
     else:
         try:
             with open("envcond.txt") as f:
-                date = f.readline()
-                time = f.readline()
-                wbgt = int(f.readline())
-                precip = f.readline()
-                lightning = f.readline()
-                uvi = f.readline()
+                date      = f.readline().strip()
+                time      = f.readline().strip()
+                wbgt      = int(f.readline().strip())
+                precip    = f.readline().strip()
+                lightning = f.readline().strip()
+                uvi       = float(f.readline().strip())
         except OSError:
-            date = "00-00"
-            time = "00:00"
-            wbgt = 0
-            precip = 0
-            lightning = "N"
-            uvi = 0
+            date      = "00-00"
+            time      = "00:00"
+            wbgt      = 0
+            precip    = "--"
+            lightning = "--"
+            uvi       = -1
 
+    print(date, time, wbgt, precip, lightning, uvi)
+    
     # Clear to white
     display.set_pen(WHITE)
     display.clear()
@@ -133,7 +142,7 @@ def displayEnvInfo(display, lat, lon, apiKey, useWifi=True):
     # lightning
     display.text("Lightning: "+lightning, int(WIDTH/3), upperRecHeight+43, scale=3)
     # UVI
-    display.text("UVI: "+uvi, int(WIDTH/3), upperRecHeight+80, scale=3)
+    display.text("UVI: "+str(uvi), int(WIDTH/3), upperRecHeight+80, scale=3)
     
     display.update()
 
@@ -141,8 +150,9 @@ def displayEnvInfo(display, lat, lon, apiKey, useWifi=True):
 # heat alert condition.
 #
 def displayWbgtSuggestions(display):
-    # Clear to white
     condition = wbgtCondition(wbgt)
+    
+    # Clear to white
     display.set_pen(WHITE)
     display.clear()
     display.set_font("bitmap8")
@@ -165,4 +175,15 @@ def displayWbgtSuggestions(display):
     else:
         display.text("No outdoor workouts. Delay practice/events until a cooler WBGT is reached.",
                      0, 39, wordwrap=WIDTH, scale=2)
+    display.update()
+
+def displayUviSuggestions(display):
+    # Clear to white
+    display.set_pen(WHITE)
+    display.clear()
+    display.set_font("bitmap8")
+    
+    display.set_pen(BLACK)
+    display.text("ABC", 5, 5, wordwrap=int(WIDTH), scale=3)
+
     display.update()

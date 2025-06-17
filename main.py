@@ -1,5 +1,6 @@
 import badger2040
-from utils import displayEnvInfo, displayWbgtSuggestions
+from machine import Pin
+from utils import displayEnvInfo, displayWbgtSuggestions, displayUviSuggestions
 
 LAT = 42.0
 LON = -71.0
@@ -7,22 +8,31 @@ OWM_API_KEY = ""
 
 DEEP_SLEEP_INTERVAL = 10 # in minutes 
 LED_BRIGHTNESS = 128 # [0,256]
+VBUS_PIN = Pin("WL_GPIO2", Pin.IN)
 
 display = badger2040.Badger2040()
 display.led(LED_BRIGHTNESS)
 
-if badger2040.pressed_to_wake(badger2040.BUTTON_DOWN):
+if badger2040.pressed_to_wake(badger2040.BUTTON_A):
     displayWbgtSuggestions(display)
-elif badger2040.pressed_to_wake(badger2040.BUTTON_UP):
+elif badger2040.pressed_to_wake(badger2040.BUTTON_C):
+    displayUviSuggestions(display)
+elif badger2040.pressed_to_wake(badger2040.BUTTON_UP) or badger2040.pressed_to_wake(badger2040.BUTTON_DOWN):
     displayEnvInfo(display, LAT, LON, OWM_API_KEY, useWifi=False)
-else:
+elif badger2040.woken_by_button() or badger2040.reset_pressed_to_wake():
     displayEnvInfo(display, LAT, LON, OWM_API_KEY)
 
 while True:
-    if display.pressed(badger2040.BUTTON_DOWN):
-        displayWbgtSuggestions(display)
-    elif display.pressed(badger2040.BUTTON_UP):
-        displayEnvInfo(display, LAT, LON, OWM_API_KEY, useWifi=False)
+    if VBUS_PIN.value():
+        print("Currently powered by USB")
+        if display.pressed(badger2040.BUTTON_A):
+            displayWbgtSuggestions(display)
+        elif display.pressed(badger2040.BUTTON_C):
+            displayUviSuggestions(display)        
+        elif display.pressed(badger2040.BUTTON_UP) or display.pressed(badger2040.BUTTON_DOWN):
+            displayEnvInfo(display, LAT, LON, OWM_API_KEY, useWifi=False)
+        else:
+            displayEnvInfo(display, LAT, LON, OWM_API_KEY)
     
     badger2040.sleep_for(DEEP_SLEEP_INTERVAL)
         # Set an RTC alert that will fire in DEEP_SLEEP_INTERVAL mins. 
