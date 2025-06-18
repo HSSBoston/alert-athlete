@@ -4,23 +4,28 @@ from utils import displayEnvInfo, displayWbgtSuggestions, displayUviSuggestions
 
 LAT = 42.0
 LON = -71.0
-OWM_API_KEY = ""
+WEATHER_API_KEY = ""
 
-DEEP_SLEEP_INTERVAL = 10 # in minutes 
-LED_BRIGHTNESS = 128 # [0,256]
+DEEP_SLEEP_INTERVAL = 5 # in minutes 
+LED_BRIGHTNESS = 128     # [0,256]
 VBUS_PIN = Pin("WL_GPIO2", Pin.IN)
 
 display = badger2040.Badger2040()
 display.led(LED_BRIGHTNESS)
 
+# If Button A pressed on battery
 if badger2040.pressed_to_wake(badger2040.BUTTON_A):
     displayWbgtSuggestions(display)
+# If Button C pressed on battery
 elif badger2040.pressed_to_wake(badger2040.BUTTON_C):
     displayUviSuggestions(display)
-elif badger2040.pressed_to_wake(badger2040.BUTTON_UP) or badger2040.pressed_to_wake(badger2040.BUTTON_DOWN):
-    displayEnvInfo(display, LAT, LON, OWM_API_KEY, useWifi=False)
-elif badger2040.woken_by_button() or badger2040.reset_pressed_to_wake():
-    displayEnvInfo(display, LAT, LON, OWM_API_KEY)
+# If Button Up or Down pressed on battery
+elif badger2040.pressed_to_wake(badger2040.BUTTON_UP) or \
+     badger2040.pressed_to_wake(badger2040.BUTTON_DOWN):
+    displayEnvInfo(display, LAT, LON, WEATHER_API_KEY, useWifi=False)
+# If Button B pressed on battery
+elif badger2040.pressed_to_wake(badger2040.BUTTON_B):
+    displayEnvInfo(display, LAT, LON, WEATHER_API_KEY)
 
 while True:
     if VBUS_PIN.value():
@@ -30,10 +35,9 @@ while True:
         elif display.pressed(badger2040.BUTTON_C):
             displayUviSuggestions(display)        
         elif display.pressed(badger2040.BUTTON_UP) or display.pressed(badger2040.BUTTON_DOWN):
-            displayEnvInfo(display, LAT, LON, OWM_API_KEY, useWifi=False)
-        else:
-            displayEnvInfo(display, LAT, LON, OWM_API_KEY)
-    
+            displayEnvInfo(display, LAT, LON, WEATHER_API_KEY, useWifi=False)
+
+    displayEnvInfo(display, LAT, LON, WEATHER_API_KEY)
     badger2040.sleep_for(DEEP_SLEEP_INTERVAL)
         # Set an RTC alert that will fire in DEEP_SLEEP_INTERVAL mins. 
         # Shut off power supply if the device is on battery.

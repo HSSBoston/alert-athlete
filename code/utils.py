@@ -6,9 +6,6 @@ import openweather
 WHITE = 15
 BLACK = 0
 
-wbgt = 0
-uvi = 0
-
 # Takes lat (str) and lon (str) to download WBGT data from NOAA
 # Returns date (str), time (str) and wbgt forecast (int).
 #
@@ -69,7 +66,24 @@ def getOwmData(lat, lon, apiKey):
     # UVI
     uvi = openweather.getCurrentUvi(weatherData)
     uvi = round(uvi, 1)
-    return (str(precip), lightning, uvi)    
+    return (str(precip), lightning, uvi)
+
+# Takes UVI (int) and its corresponding exposure category (str) 
+#
+def uviCondition(uvi):
+    if uvi<=2:
+        condition = "Low"
+    elif 3<=uvi<=5:
+        condition = "Moderate"
+    elif 6<=uvi<=7:
+        condition = "High"
+    elif 8<=uvi<=10:
+        condition  = "Very high"
+    else:
+        condition = "Extreme"
+        
+    return condition
+    
 
 def displayEnvInfo(display, lat, lon, apiKey, useWifi=True):
     if useWifi:
@@ -135,14 +149,15 @@ def displayEnvInfo(display, lat, lon, apiKey, useWifi=True):
     display.set_pen(BLACK)
     display.text(str(wbgt), 5, upperRecHeight+10, scale=8)
     # WGBT condition
-    condition = wbgtCondition(wbgt)
-    display.text(condition, 7, int(HEIGHT*4/5), scale=3)
+    wCondition = wbgtCondition(wbgt)
+    display.text(wCondition, 7, int(HEIGHT*4/5), scale=3)
     # precip
     display.text("Rain: "+precip+"%", int(WIDTH/3), upperRecHeight+10, scale=3)
     # lightning
     display.text("Lightning: "+lightning, int(WIDTH/3), upperRecHeight+43, scale=3)
     # UVI
-    display.text("UVI: "+str(uvi), int(WIDTH/3), upperRecHeight+80, scale=3)
+    uCondition  = uviCondition(uvi)
+    display.text("UVI: "+str(uvi)+"; "+uCondition, int(WIDTH/3), upperRecHeight+80, scale=3)
     
     display.update()
 
@@ -178,12 +193,30 @@ def displayWbgtSuggestions(display):
     display.update()
 
 def displayUviSuggestions(display):
+    condition = uviCondition(uvi)
+    
     # Clear to white
     display.set_pen(WHITE)
     display.clear()
     display.set_font("bitmap8")
     
     display.set_pen(BLACK)
-    display.text("ABC", 5, 5, wordwrap=int(WIDTH), scale=3)
+    display.text(condition+":\n", 5, 5, wordwrap=int(WIDTH),scale=3)
+
+    if condition=="Low":
+        display.text("You can safely enoy being outside. Wear sunglasses on bright days. If you burn easily, cover up and use sunscreen SPF 15+.",
+                     0, 39, wordwrap=WIDTH, scale=2)
+    elif condition=="Moderate":
+        display.text("Take precations such as wearing a hat and sunglasses and using sunscreen SPF 30+. Seek shade during midday hours.",
+                     0, 39, wordwrap=WIDTH, scale=2)
+    elif condition=="High":
+        display.text("Protection against sun damage is needed. Wear a hat, sunglasses, and long pants. Use sunscreen SPF 30+ and seek shade during midday hours.",
+                     0, 39, wordwrap=WIDTH, scale=2)
+    elif condition=="Very high":
+        display.text("Protection against sun damage is needed. Opt to be outside between 10 AM and 4 PM. A shirt, hat and sunscreen are a must. Be sure to seek shade.",
+                     0, 39, wordwrap=WIDTH, scale=2)
+    else:
+        display.text("Protection against sun damage is needed. Opt to be outside between 10 AM and 4 PM. A shirt, hat and sunscreen are a must. Be sure to seek shade.",
+                     0, 39, wordwrap=WIDTH, scale=2)
 
     display.update()
