@@ -9,7 +9,11 @@ AlertAthlete is implemented with a battery-operated RP2040 microcontroller, a ba
 
 This project was presented at [PhysTech 2025](https://phystech2025.devpost.com/). 
 
-
+### Key Features: 
+- Downloading and displaying environmental forecasts
+- Displaying suggested precautions (WBGT-based activity modification and UVI-based sun protection)
+- Easy to use screen transitions with physical buttons
+- Saving battery consumption through deep sleep cycles 
 
 https://github.com/user-attachments/assets/80729b33-b0b7-4be8-ba07-94c1bcf11b65
 
