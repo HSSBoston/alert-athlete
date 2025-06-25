@@ -6,9 +6,8 @@ LAT = 42.0
 LON = -71.0
 WEATHER_API_KEY = ""
 
-DEEP_SLEEP_INTERVAL = 5 # in minutes 
-LED_BRIGHTNESS = 128     # [0,256]
-VBUS_PIN = Pin("WL_GPIO2", Pin.IN)
+DEEP_SLEEP_INTERVAL = 5   # in minutes 
+LED_BRIGHTNESS      = 128 # [0,255]
 
 display = badger2040.Badger2040()
 display.led(LED_BRIGHTNESS)
