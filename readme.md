@@ -9,3 +9,7 @@ AlertAthlete is implemented with a battery-operated RP2040 microcontroller, a ba
 
 This project was presented at [PhysTech 2025](https://phystech2025.devpost.com/). 
 
+
+
+https://github.com/user-attachments/assets/80729b33-b0b7-4be8-ba07-94c1bcf11b65
+
