@@ -9,6 +9,9 @@ AlertAthlete is implemented with a battery-operated RP2040 microcontroller, a ba
 
 This project was presented at [PhysTech 2025](https://phystech2025.devpost.com/). It won a [2nd place](https://phystech2025.devpost.com/project-gallery) award.
 
+### Publications:
+- Hanna Suzuki, "AlertAthletes: A Real Time Alert Tracker for Outdoor Athletes in the Summer," In R. Nagata, H. Suzuki and S. Nagata (eds.), *Innovation in Motion: Technology Hacks from PhysTech 2025*, Binnovative, September 2025.
+
 ### Key Features: 
 - Downloading and displaying environmental forecasts
 - Displaying suggested precautions (WBGT-based activity modification and UVI-based sun protection)
