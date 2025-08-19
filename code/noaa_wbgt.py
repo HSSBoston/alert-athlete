@@ -54,8 +54,8 @@ def downloadWbgt(lat, lon):
         raise RuntimeError("Request failed. Status code: " + str(response.status_code))
     
 if __name__ == "__main__":    
-    lat = 42.36
-    lon = -71.01
+    lat = 42.0
+    lon = -71.0
 
     display = badger2040.Badger2040()
     # Connects to the wireless network. Make sure to complete WIFI_CONFIG.py.
