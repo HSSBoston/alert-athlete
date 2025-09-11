@@ -12,14 +12,16 @@ This project was presented at [PhysTech 2025](https://phystech2025.devpost.com/)
 
 ## Publications
 
-- Hanna Suzuki, "AlertAthletes: A Real Time Alert Tracker for Outdoor Athletes in the Summer," In R. Nagata, H. Suzuki and S. Nagata (eds.), *Innovation in Motion: Technology Hacks from PhysTech 2025*, Chapter 9, pp., Binnovative, September 2025.
+- Hanna Suzuki, "AlertAthletes: A Real Time Alert Tracker for Outdoor Athletes in the Summer," In R. Nagata, H. Suzuki and S. Nagata (eds.), *Innovation in Motion: Technology Hacks from PhysTech 2025*, Chapter 9, pp. 90 - 108, Binnovative, ISBN: 979-8-2639-6243-2, September 2025.
 
-## Key Features:
+## Key Features
 
 - Downloading and displaying environmental forecasts
 - Displaying suggested precautions (WBGT-based activity modification and UVI-based sun protection)
 - Easy to use screen transitions with physical buttons
 - Saving battery consumption through deep sleep cycles 
+
+## Pictures/Videos
 
 https://github.com/user-attachments/assets/80729b33-b0b7-4be8-ba07-94c1bcf11b65
 
