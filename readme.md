@@ -12,6 +12,7 @@ This project was presented at [PhysTech 2025](https://phystech2025.devpost.com/)
 
 ## Publications
 
+- Hanna Suzuki, "Machine Learning-based Heat Risk Estimation for Outdoor Sports," In *Proc. of 12th International Young Researchers' Conference*, oral presentation abstract, December 2025. [preprint](https://github.com/HSSBoston/alert-athlete/blob/main/doc/iyrc25fall.pdf)
 - Hanna Suzuki, "AlertAthletes: A Real Time Alert Tracker for Outdoor Athletes in the Summer," In R. Nagata, H. Suzuki and S. Nagata (eds.), *[Innovation in Motion: Technology Hacks from PhysTech 2025](https://www.amazon.com/dp/B0FR13T4KH)*, Chapter 9, pp. 90 - 108, Binnovative, ISBN: 979-8-2639-6243-2, September 2025. [preprint](./doc/alert-athlete-book-chapter.pdf)
 
 ## Key Features
